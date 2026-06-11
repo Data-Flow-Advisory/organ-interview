@@ -1,0 +1,31 @@
+{
+  "_README": "Connection types this organ NEEDS but the shared vocabulary (vocab/types.json, from orchestrator@feat/drift-gate) does not yet define. These are PROPOSED, not official: the open PR on this organ repo proposes adding them to the orchestrator's types.json, where they get reviewed before becoming canonical (CONNECTORS.md: 'new types reviewed, not minted freely'). Until then the port conformance check treats them as valid-but-amber so this repo stays green while the upstream review lands. InterviewQuestion is reused VERBATIM from organ-claude-service's proposal (same schema, so the two interview question-generator organs are brick-swappable) with organ-interview added as a second producer.",
+  "version": 1,
+  "types": {
+    "InterviewState": {
+      "desc": "The full state of a discovery interview at a single turn: the prior Q/A history, the theme vocabulary and fallback question bank driving it, the interviewee framing (role, business function, opening idea, skipped themes, interview type), the optional raw model output already fetched on the Claude IO edge, and the end-of-interview floor/ceiling. A single composite wire so a question-generator organ can be fed the whole interview context as one typed input. Produced by the interview surface as it accumulates answers; consumed by an interview question-generator organ.",
+      "schema": {
+        "history": "array",
+        "theme_pack": "str",
+        "themes": "array",
+        "fallback_questions": "array",
+        "job_role": "str",
+        "business_function": "str",
+        "opening_idea": "str|null",
+        "skipped_themes": "array",
+        "interview_type": "str",
+        "model_output": "object|null",
+        "min_questions": "int",
+        "max_questions": "int"
+      },
+      "produced_by_eg": ["organ-interview-surface"],
+      "consumed_by_eg": ["organ-interview", "organ-claude-service"]
+    },
+    "InterviewQuestion": {
+      "desc": "The next interview question to ask plus the qualifiers that situate it: the theme it probes, the probe type, an estimated depth, the answer widget type (qtype) and an end-of-interview signal. The output of an interview question-generator organ; consumed by the surface that renders/asks the question and appends the answer back onto the InterviewTranscript.",
+      "schema": {"question": "str", "theme": "str", "probe_type": "str", "depth": "int", "should_end": "bool", "qtype": "str", "options": "array|null", "allow_other": "bool"},
+      "produced_by_eg": ["organ-claude-service", "organ-interview"],
+      "consumed_by_eg": ["organ-interview-surface"]
+    }
+  }
+}

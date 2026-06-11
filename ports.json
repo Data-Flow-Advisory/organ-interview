@@ -1,0 +1,9 @@
+{
+  "_README": "Typed ports for this organ, per the connection standard (orchestrator@feat/drift-gate/CONNECTORS.md). `name` is the literal wiring address — the key decide() reads under `state` (inputs) or writes under `output` (outputs). `type` is a name from the shared vocabulary (vocab/types.json), or a locally-proposed addition (vocab/proposed_types.json) pending upstream review. Two ports connect iff their `type` matches. This organ is the PURE half of interview-question generation: the Claude call is an IO edge (organ-claude-adapter) whose result arrives inside InterviewState as `model_output`; decide() reads only the single composite `state` wire and writes the single `next` wire.",
+  "inputs": [
+    {"name": "state", "type": "InterviewState", "required": true}
+  ],
+  "outputs": [
+    {"name": "next", "type": "InterviewQuestion"}
+  ]
+}

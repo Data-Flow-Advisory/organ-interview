@@ -1,0 +1,24 @@
+{
+  "state": {
+    "state": {
+      "history": [["Q1","A1"],["Q2","A2"],["Q3","A3"],["Q4","A4"],["Q5","A5"]],
+      "theme_pack": "ops",
+      "job_role": "Driver",
+      "business_function": "Transport",
+      "model_output": {
+        "question": "How confident are you in the current ETA estimates?",
+        "theme": "data_location",
+        "probe_type": "quantify",
+        "qtype": "scale_1_5",
+        "options": [
+          {"label": "Not at all", "value": "1"},
+          {"label": "Slightly", "value": "2"},
+          {"label": "Moderately", "value": "3"},
+          {"label": "Very", "value": "4"},
+          {"label": "Completely", "value": "5"}
+        ]
+      }
+    }
+  },
+  "context": {}
+}
