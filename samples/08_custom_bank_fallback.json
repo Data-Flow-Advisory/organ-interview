@@ -1,0 +1,17 @@
+{
+  "state": {
+    "state": {
+      "history": [["Q1","A1"]],
+      "theme_pack": "property_management",
+      "fallback_questions": [
+        ["Tell me about a tenant move-out — what happens step by step?", "process", "locate"],
+        ["Where do you record arrears and chase them?", "data_location", "locate"],
+        ["What's the most painful part of managing maintenance jobs?", "pain_point", "exception"]
+      ],
+      "job_role": "Property Manager",
+      "business_function": "Lettings",
+      "interview_type": "user"
+    }
+  },
+  "context": {}
+}

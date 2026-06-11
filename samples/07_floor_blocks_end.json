@@ -1,0 +1,19 @@
+{
+  "state": {
+    "state": {
+      "history": [["Q1","A1"],["Q2","A2"],["Q3","A3"]],
+      "theme_pack": "ops",
+      "job_role": "Operative",
+      "business_function": "Warehouse",
+      "min_questions": 8,
+      "model_output": {
+        "question": "Is that everything?",
+        "theme": "process",
+        "probe_type": "locate",
+        "qtype": "open_text",
+        "should_end": true
+      }
+    }
+  },
+  "context": {}
+}

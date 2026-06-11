@@ -1,0 +1,14 @@
+vocab/types.json is a verbatim snapshot of the shared connection-type
+vocabulary from the orchestrator repo:
+
+  repo: Data-Flow-Advisory/orchestrator
+  ref:  feat/drift-gate
+  path: types.json
+
+It is vendored (rather than fetched at CI time) so the port conformance
+check is hermetic and does not depend on a moving feature branch. Refresh
+it when the upstream vocabulary changes. Do not hand-edit — locally
+proposed additions live in vocab/proposed_types.json and must be
+upstreamed into the orchestrator's types.json before they are official.
+
+The connection standard itself: orchestrator@feat/drift-gate/CONNECTORS.md

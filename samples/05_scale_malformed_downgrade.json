@@ -1,0 +1,18 @@
+{
+  "state": {
+    "state": {
+      "history": [["Q1","A1"],["Q2","A2"],["Q3","A3"],["Q4","A4"]],
+      "theme_pack": "ops",
+      "job_role": "Clerk",
+      "business_function": "Admin",
+      "model_output": {
+        "question": "Rate the pain of the manual entry step.",
+        "theme": "pain_point",
+        "probe_type": "quantify",
+        "qtype": "scale_1_5",
+        "options": [{"label": "Low", "value": "1"}, {"label": "High", "value": "2"}]
+      }
+    }
+  },
+  "context": {}
+}

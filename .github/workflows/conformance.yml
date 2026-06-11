@@ -1,0 +1,98 @@
+name: conformance
+
+# Conformance check: verify that this organ conforms to the canonical shape.
+# - organ.py exists at root
+# - organ.py exports decide(state, context) function
+# - samples/*.json exist
+# - organ runs on all samples without error
+# - output has shape {output, rationale, self_metric} with self_metric.confidence
+#
+# Deviations from the orchestrator template's conformance.yml (both deliberate;
+# the verbatim template never produces a green run in this org):
+#   1. runs-on targets the org's self-hosted dfa-ci fleet — GitHub-hosted
+#      ubuntu-latest has no minutes here and startup-fails (0 jobs).
+#   2. The output shape check lives in conformance_validate.py rather than an
+#      inline multi-line `python3 -c`; column-0 Python inside a `run: |` block
+#      scalar terminates the scalar and makes GitHub reject the whole workflow
+#      (startup failure). This is why every verbatim-template organ repo has a
+#      perpetually-red conformance run.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  conformance:
+    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","linux","dfa-ci"]') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check organ.py exists at root
+        run: |
+          if [ ! -f "organ.py" ]; then
+            echo "ERROR: organ.py not found at root"
+            exit 1
+          fi
+          echo "✓ organ.py exists at root"
+
+      - name: Check organ.py has decide() function
+        run: |
+          if ! grep -q "^def decide" organ.py; then
+            echo "ERROR: organ.py does not export a decide() function"
+            exit 1
+          fi
+          echo "✓ organ.py has decide() function"
+
+      - name: Check samples directory
+        run: |
+          if [ ! -d "samples" ] || [ -z "$(find samples -name '*.json')" ]; then
+            echo "ERROR: samples/ directory missing or empty"
+            exit 1
+          fi
+          echo "✓ samples/ directory exists with .json files"
+
+      - name: Run conformance check on all samples
+        run: |
+          set -euo pipefail
+          echo "# Organ Conformance Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "Running \`organ.py\` on all samples..." >> "$GITHUB_STEP_SUMMARY"
+
+          sample_count=0
+          for sample in samples/*.json; do
+            sample_count=$((sample_count + 1))
+            sample_name="$(basename "$sample")"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "## Sample: $sample_name" >> "$GITHUB_STEP_SUMMARY"
+
+            # Run the organ; validate the shape via the committed helper so the
+            # workflow YAML stays free of embedded multi-line Python.
+            output="$(ORGAN_INPUT="$sample" python3 organ.py < /dev/null)"
+            echo "$output" | python3 conformance_validate.py "$sample_name"
+
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            echo "$output" | python3 -m json.tool >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "$output" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "✓ All $sample_count samples passed conformance check" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check typed ports manifest
+        run: |
+          set -euo pipefail
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Typed ports (connection standard)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          # Asserts ports.json parses, every declared type exists in the
+          # vocabulary (vocab/types.json or proposed), decide() reads each
+          # declared input name and writes each declared output name.
+          python3 conformance_ports.py | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run pytest
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --quiet pytest
+          .venv/bin/python -m pytest -q

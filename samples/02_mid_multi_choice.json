@@ -1,0 +1,21 @@
+{
+  "state": {
+    "state": {
+      "history": [["Q1","A1"],["Q2","A2"],["Q3","A3"],["Q4","A4"]],
+      "theme_pack": "ops",
+      "job_role": "Yard Supervisor",
+      "business_function": "Operations",
+      "interview_type": "user",
+      "model_output": {
+        "question": "Which of these handoffs causes the most delay?",
+        "theme": "process",
+        "probe_type": "handoff",
+        "qtype": "multi_choice",
+        "options": [{"label": "Gate to yard", "value": "gate"}, {"label": "Yard to dispatch", "value": "dispatch"}],
+        "allow_other": true,
+        "depth": 3
+      }
+    }
+  },
+  "context": {}
+}

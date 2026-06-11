@@ -1,0 +1,21 @@
+{
+  "state": {
+    "state": {
+      "history": [],
+      "theme_pack": "ops",
+      "job_role": "Operations Manager",
+      "business_function": "Logistics",
+      "opening_idea": "A single scheduling tool would save us hours",
+      "interview_type": "user",
+      "model_output": {
+        "question": "Walk me through how the daily rota gets built today.",
+        "theme": "process",
+        "probe_type": "locate",
+        "qtype": "single_choice",
+        "options": [{"label": "A", "value": "a"}],
+        "should_end": true
+      }
+    }
+  },
+  "context": {}
+}
