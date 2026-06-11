@@ -1,0 +1,19 @@
+{
+  "_checked": {
+    "corpus_checked": "2026-06-11",
+    "oss_checked": "2026-06-11"
+  },
+  "_audit": {
+    "item": "19978",
+    "date": "2026-06-11",
+    "corpus": {
+      "verdict": "duplicate",
+      "ref": "Data-Flow-Advisory/organ-claude-service",
+      "rationale": "organ-interview and organ-claude-service are both the pure 'next interview question' decider extracted from the same source function (discovery-engine app/services/claude_service.py::next_question), with the same {state, context} -> {output: question/theme/probe_type/qtype/should_end, rationale, self_metric} contract, the same qtype/ending rules, and the same theme-pack fallback. organ-claude-service was created earlier (2026-06-11T07:23Z) and is fully built (organ.py + test_organ.py + conformance + samples); organ-interview was created ~3.5h later (2026-06-11T10:50Z) and is a README-only scaffold. Recommendation: do NOT build out organ-interview as a parallel decider; consolidate on organ-claude-service. See flagged issue."
+    },
+    "oss": {
+      "verdict": "no_adopt_candidate",
+      "rationale": "No permissive, maintained OSS library maps to this contract. Survey-rendering frameworks (SurveyJS, LimeSurvey, Formbricks) render fixed questionnaires rather than deciding the next question. Adaptive-questionnaire prior art is academic computerized-adaptive-testing (e.g. ADAPQUEST, Bayesian-network / IRT coverage-heuristic research) aimed at psychometric item-response scoring, not open-ended discovery probing driven by DFA theme packs. None fit the orchestrator pure-organ {state,context}->{output,rationale,self_metric} shape. Keep in-house."
+    }
+  }
+}
